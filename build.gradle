@@ -22,10 +22,31 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // mariadb 설정
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.6.2'
+
+    // 회원가입을 위한 스프링 시큐리티와 JWT 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.jetbrains:annotations:24.0.0'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // 변경 이력 관리를 위한 라이브러리
+    implementation 'org.springframework.data:spring-data-envers'
+
+    // 필드 유효성 검사를 위한 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // 컨트롤러 테스트 시 csrf관련 에러 처리를 위한 의존성 주입
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('bootBuildImage') {
