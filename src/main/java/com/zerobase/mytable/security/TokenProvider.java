@@ -1,8 +1,10 @@
 package com.zerobase.mytable.security;
 
 import com.zerobase.mytable.exception.CustomException;
-import com.zerobase.mytable.type.ErrorCode;
+import com.zerobase.mytable.service.CustomerService;
 import com.zerobase.mytable.service.PartnerService;
+import com.zerobase.mytable.type.ErrorCode;
+import com.zerobase.mytable.type.UserType;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +27,10 @@ import java.util.List;
 public class TokenProvider {
 
     private final PartnerService partnerService;
+    private final CustomerService customerService;
 
     @Value("${springboot.jwt.secret}")
     private String secretKey;
-
-    private final long tokenValidMillisecond = 1000L * 60 * 60 * 24;
 
     // secretKey를 Base64 형식으로 인코딩(빈으로 등록될 때 실행되는 메서드)
     @PostConstruct
@@ -45,6 +46,7 @@ public class TokenProvider {
 
         Date now = new Date();
 
+        long tokenValidMillisecond = 1000L * 60 * 60 * 24;
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -55,20 +57,33 @@ public class TokenProvider {
 
     // 토큰 인증 정보 조회 및 Authentication 생성
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = partnerService.loadUserByUsername(getUsername(token));
+        UserDetails userDetails;
+
+        if (getRole(token).equals(List.of(UserType.ROLE_PARTNER.toString()))) {
+            userDetails = partnerService.loadUserByUsername(getUid(token));
+        } else {
+            userDetails = customerService.loadUserByUsername(getUid(token));
+        }
+
         return new UsernamePasswordAuthenticationToken(userDetails, "",
                 userDetails.getAuthorities());
     }
 
     // 토큰으로부터 uid 추출
-    public String getUsername(String token) {
+    public String getUid(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().getSubject();
     }
 
+    // 토큰으로부터 role 추출
+    private Object getRole(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+                .getBody().get("roles");
+    }
+
     // http 헤더에서 token 값 추출
     public String resolveToken(HttpServletRequest request){
-        return request.getHeader("X-AUTH_TOKEN");
+        return request.getHeader("X-AUTH-TOKEN");
     }
 
     // 토큰 유효성 체크
