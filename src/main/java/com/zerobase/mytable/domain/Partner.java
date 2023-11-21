@@ -30,7 +30,7 @@ public class Partner extends BaseEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // id는 인덱스로 사용되기 때문에 고유 식별자 사용
+    // id는 인덱스로 사용되어 파트너 가입자 수 노출 될 수 있기 때문에 고유 식별자 사용
     @Column(unique = true, nullable = false)
     private String uid;
 
@@ -103,7 +103,7 @@ public class Partner extends BaseEntity implements UserDetails {
                 .password(request.getPassword())
                 .phone(request.getPhone())
                 .birth(request.getBirth())
-                .roles(Collections.singletonList(UserType.PARTNER.toString()))
+                .roles(Collections.singletonList(UserType.ROLE_PARTNER.toString()))
                 .build();
     }
 }

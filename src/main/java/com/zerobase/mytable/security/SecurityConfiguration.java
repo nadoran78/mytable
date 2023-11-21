@@ -2,11 +2,12 @@ package com.zerobase.mytable.security;
 
 import com.zerobase.mytable.exception.CustomAccessDeniedHandler;
 import com.zerobase.mytable.exception.CustomAuthenticationEntryPoint;
-import com.zerobase.mytable.type.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -16,6 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
 public class SecurityConfiguration {
 
     private final TokenProvider tokenProvider;
@@ -32,10 +35,7 @@ public class SecurityConfiguration {
                 .and()
                     // 애플리케이션에 들어오는 요청에 대한 사용 권한을 체크, url마다 설정 가능
                     .authorizeRequests()
-                    .antMatchers("/sign-up/**", "/sign-in/**", "/review").permitAll()
-                    .antMatchers("/customer/**").hasRole(UserType.CUSTOMER.toString())
-                    .antMatchers("/partner/**").hasRole(UserType.PARTNER.toString())
-
+                    .anyRequest().permitAll()
                 .and()
                     // 권한 확인 과정에서 통과하지 못하는 예외가 발생할 경우 예외 전달
                     .exceptionHandling()

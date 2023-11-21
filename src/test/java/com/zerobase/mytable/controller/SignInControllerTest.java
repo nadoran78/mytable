@@ -5,10 +5,10 @@ import com.zerobase.mytable.dto.SignInDto;
 import com.zerobase.mytable.service.SignInService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -18,7 +18,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(SignInController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class SignInControllerTest {
 
     @MockBean
@@ -32,7 +33,6 @@ class SignInControllerTest {
 
     // 파트너 로그인 성공
     @Test
-    @WithMockUser
     void successPartnerSignIn() throws Exception {
         //given
         SignInDto.Response response = new SignInDto.Response();
@@ -50,8 +50,7 @@ class SignInControllerTest {
         //then
         mockMvc.perform(post("/sign-in/partner")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson)
-                        .with(csrf()))
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.code").value(0))
@@ -60,7 +59,6 @@ class SignInControllerTest {
 
     // 고객 로그인 성공
     @Test
-    @WithMockUser
     void successCustomerSignIn() throws Exception {
         //given
         SignInDto.Response response = new SignInDto.Response();
@@ -78,8 +76,7 @@ class SignInControllerTest {
         //then
         mockMvc.perform(post("/sign-in/customer")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson)
-                        .with(csrf()))
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.code").value(0))

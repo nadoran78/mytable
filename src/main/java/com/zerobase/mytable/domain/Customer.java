@@ -102,7 +102,7 @@ public class Customer extends BaseEntity implements UserDetails {
                 .password(request.getPassword())
                 .phone(request.getPhone())
                 .birth(request.getBirth())
-                .roles(Collections.singletonList(UserType.CUSTOMER.toString()))
+                .roles(Collections.singletonList(UserType.ROLE_CUSTOMER.toString()))
                 .build();
     }
 }

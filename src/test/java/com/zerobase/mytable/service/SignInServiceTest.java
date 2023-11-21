@@ -46,7 +46,7 @@ class SignInServiceTest {
                 .thenReturn(Optional.ofNullable(Partner.builder()
                         .uid("abc")
                         .password("123abc!@#")
-                        .roles(Collections.singletonList(UserType.PARTNER.toString()))
+                        .roles(Collections.singletonList(UserType.ROLE_PARTNER.toString()))
                         .build()));
         Mockito.when(passwordEncoder.matches(anyString(), anyString()))
                 .thenReturn(true);
@@ -90,7 +90,7 @@ class SignInServiceTest {
                 .thenReturn(Optional.ofNullable(Partner.builder()
                         .uid("abc")
                         .password("123abc!@#")
-                        .roles(Collections.singletonList(UserType.PARTNER.toString()))
+                        .roles(Collections.singletonList(UserType.ROLE_PARTNER.toString()))
                         .build()));
         Mockito.when(passwordEncoder.matches(anyString(), anyString()))
                 .thenReturn(false);
@@ -113,7 +113,7 @@ class SignInServiceTest {
                 .thenReturn(Optional.ofNullable(Customer.builder()
                         .uid("abc")
                         .password("123abc!@#")
-                        .roles(Collections.singletonList(UserType.CUSTOMER.toString()))
+                        .roles(Collections.singletonList(UserType.ROLE_CUSTOMER.toString()))
                         .build()));
         Mockito.when(passwordEncoder.matches(anyString(), anyString()))
                 .thenReturn(true);
@@ -157,7 +157,7 @@ class SignInServiceTest {
                 .thenReturn(Optional.ofNullable(Customer.builder()
                         .uid("abc")
                         .password("123abc!@#")
-                        .roles(Collections.singletonList(UserType.CUSTOMER.toString()))
+                        .roles(Collections.singletonList(UserType.ROLE_CUSTOMER.toString()))
                         .build()));
         Mockito.when(passwordEncoder.matches(anyString(), anyString()))
                 .thenReturn(false);

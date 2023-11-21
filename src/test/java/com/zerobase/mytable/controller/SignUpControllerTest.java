@@ -5,10 +5,10 @@ import com.zerobase.mytable.dto.SignUpDto;
 import com.zerobase.mytable.service.SignUpService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -22,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(SignUpController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class SignUpControllerTest {
 
     @MockBean
@@ -36,7 +37,6 @@ class SignUpControllerTest {
 
     // SingUpDto.Request에 선언된 필드들 유효성 검사 성공 테스트
     @Test
-    @WithMockUser
     void isValidField() throws Exception {
         //given
         SignUpDto.Request request = SignUpDto.Request.builder()
@@ -53,8 +53,7 @@ class SignUpControllerTest {
         //then
         mockMvc.perform(post("/sign-up/partner")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson)
-                        .with(csrf()))
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -62,7 +61,6 @@ class SignUpControllerTest {
 
     // SingUpDto.Request에 선언된 필드들 유효성 검사 실패 테스트
     @Test
-    @WithMockUser
     void isNotValidField() throws Exception {
         //given
         SignUpDto.Request request = SignUpDto.Request.builder()
@@ -88,7 +86,6 @@ class SignUpControllerTest {
 
     // 파트너 회원가입 성공 테스트
     @Test
-    @WithMockUser
     void successPartnerSignUp() throws Exception {
         //given
         SignUpDto.Response response = new SignUpDto.Response();
@@ -111,8 +108,7 @@ class SignUpControllerTest {
         //then
         mockMvc.perform(post("/sign-up/partner")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson)
-                        .with(csrf()))
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.code").value(0))
@@ -122,7 +118,6 @@ class SignUpControllerTest {
 
     // 고객 회원가입 성공 테스트
     @Test
-    @WithMockUser
     void successCustomerSignUp() throws Exception {
         //given
         SignUpDto.Response response = new SignUpDto.Response();
@@ -145,8 +140,7 @@ class SignUpControllerTest {
         //then
         mockMvc.perform(post("/sign-up/customer")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson)
-                        .with(csrf()))
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.code").value(0))
