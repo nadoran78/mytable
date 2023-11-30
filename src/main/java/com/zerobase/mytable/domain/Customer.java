@@ -11,10 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -52,6 +49,9 @@ public class Customer extends BaseEntity implements UserDetails {
     // 사용권한 분류, Collection 형태 저장할 때 쓰는 어노테이션
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     private List<String> roles;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
+    private List<Reservation> reservations = new ArrayList<>();
 
     // 계정이 가지고 있는 권한 목록을 리턴
     @Override

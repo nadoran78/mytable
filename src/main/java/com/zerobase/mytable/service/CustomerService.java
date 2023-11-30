@@ -13,7 +13,6 @@ public class CustomerService implements UserDetailsService {
 
     private final CustomerRepository customerRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return customerRepository.getByUid(username);

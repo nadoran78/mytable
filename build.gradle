@@ -43,6 +43,13 @@ dependencies {
     // 필드 유효성 검사를 위한 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // 고객이 예약 요청 시 점주에게 문자 전송
+    implementation 'net.nurigo:sdk:4.3.0'
+
+    // 스웨거 적용
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // 컨트롤러 테스트 시 csrf관련 에러 처리를 위한 의존성 주입
