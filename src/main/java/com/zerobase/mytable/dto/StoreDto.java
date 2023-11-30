@@ -1,6 +1,7 @@
 package com.zerobase.mytable.dto;
 
 import com.zerobase.mytable.domain.Store;
+import com.zerobase.mytable.type.Address;
 import lombok.*;
 
 @Getter
@@ -14,24 +15,15 @@ public class StoreDto {
 
     private String phone;
 
-    private String sido;
-
-    private String sigungu;
-
-    private String roadname;
-
-    private String detailAddress;
+    private Address address;
 
     private String description;
 
-    public static StoreDto from(Store store){
+    public static StoreDto from(Store store) {
         return StoreDto.builder()
                 .storename(store.getStorename())
                 .phone(store.getPhone())
-                .sido(store.getSido())
-                .sigungu(store.getSigungu())
-                .roadname(store.getRoadname())
-                .detailAddress(store.getDetailAddress())
+                .address(store.getAddress())
                 .description(store.getDescription())
                 .build();
     }

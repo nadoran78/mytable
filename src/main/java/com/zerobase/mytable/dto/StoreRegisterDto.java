@@ -34,6 +34,7 @@ public class StoreRegisterDto {
 
         @NotNull(message = "반드시 값이 있어야 합니다.")
         private String description;
+
     }
 
     @Getter

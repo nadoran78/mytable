@@ -1,11 +1,13 @@
 package com.zerobase.mytable.domain;
 
 import com.zerobase.mytable.dto.StoreRegisterDto;
+import com.zerobase.mytable.type.Address;
 import lombok.*;
 import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,18 +28,9 @@ public class Store extends BaseEntity{
     @Column
     private String phone;
 
-    // 점포 입력 받을 때 주소 입력(추후 통계 처리할 경우를 위해 시도/ 시군구/ 도로명 / 상세주소로 나눠서 받음)
     @Column(nullable = false)
-    private String sido;
-
-    @Column(nullable = false)
-    private String sigungu;
-
-    @Column(nullable = false)
-    private String roadname;
-
-    @Column(nullable = false)
-    private String detailAddress;
+    @Embedded
+    private Address address;
 
     // 상점에 대한 설명 입력
     @Column(nullable = false)
@@ -46,14 +39,19 @@ public class Store extends BaseEntity{
     @ManyToOne
     private Partner partner;
 
+    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
+    private List<Reservation> reservations = new ArrayList<>();
+
     public static Store from(StoreRegisterDto.Request request){
         return Store.builder()
                 .storename(request.getStorename())
                 .phone(request.getPhone())
-                .sido(request.getSido())
-                .sigungu(request.getSigungu())
-                .roadname(request.getRoadname())
-                .detailAddress(request.getDetailAddress())
+                .address(Address.builder()
+                        .sido(request.getSido())
+                        .sigungu(request.getSigungu())
+                        .roadname(request.getRoadname())
+                        .detailAddress(request.getDetailAddress())
+                        .build())
                 .description(request.getDescription())
                 .build();
     }

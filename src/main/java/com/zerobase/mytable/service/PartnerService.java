@@ -1,7 +1,6 @@
 package com.zerobase.mytable.service;
 
 import com.zerobase.mytable.repository.PartnerRepository;
-import com.zerobase.mytable.type.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
