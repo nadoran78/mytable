@@ -1,4 +1,4 @@
-package com.zerobase.mytable.controller;
+package com.zerobase.mytable.controller.reservation;
 
 import com.zerobase.mytable.dto.ReservationDto;
 import com.zerobase.mytable.service.ReservationService;
@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/customer/reservation")
 @PreAuthorize("hasRole('CUSTOMER')")
-public class CustomerController {
+public class CustomerReservationController {
 
     private final ReservationService reservationService;
 
@@ -45,7 +45,7 @@ public class CustomerController {
     }
 
     // 예약 정보 수정
-    @PutMapping("/detail/update")
+    @PutMapping("/detail")
     public ReservationDto updateReservation(
             @RequestHeader(name = "X-AUTH-TOKEN") String token,
             @RequestParam String reservationUid,
@@ -54,7 +54,7 @@ public class CustomerController {
     }
 
     // 예약 취소
-    @PostMapping("/detail/cancel")
+    @PostMapping("/detail")
     public ReservationDto cancelReservation(
             @RequestHeader(name = "X-AUTH-TOKEN") String token,
             @RequestParam String reservationUid) {

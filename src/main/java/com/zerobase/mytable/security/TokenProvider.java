@@ -76,7 +76,7 @@ public class TokenProvider {
     }
 
     // 토큰으로부터 role 추출
-    private Object getRole(String token) {
+    public Object getRole(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().get("roles");
     }

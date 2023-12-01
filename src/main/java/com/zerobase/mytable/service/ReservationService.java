@@ -92,6 +92,7 @@ public class ReservationService {
     }
 
     // 고객 예약 수정
+    @Transactional
     public ReservationDto updateReservation(String token, String reservationUid,
                                             ReservationDto request) {
         Reservation reservation = getReservationAndValidateCustomer(
@@ -114,11 +115,13 @@ public class ReservationService {
     }
 
     // 고객 예약 취소
+    @Transactional
     public ReservationDto cancelReservation(String token, String reservationUid) {
         Reservation reservation = getReservationAndValidateCustomer(
                 token, reservationUid);
 
         reservation.setStatus(ReservationStatus.CANCEL);
+        sendReservationMessageToPartner(reservation);
 
         return ReservationDto.from(reservationRepository.save(reservation));
     }
@@ -132,6 +135,7 @@ public class ReservationService {
     }
 
     // 파트너 예약 승인
+    @Transactional
     public ReservationDto partnerReservationConfirm(String token, String reservationUid) {
         Reservation reservation = getReservationAndValidatePartner(
                 token, reservationUid);
@@ -146,6 +150,7 @@ public class ReservationService {
 
 
     // 파트너 예약 거절
+    @Transactional
     public ReservationDto partnerReservationReject(String token, String reservationUid) {
         Reservation reservation = getReservationAndValidatePartner(
                 token, reservationUid);
@@ -181,7 +186,7 @@ public class ReservationService {
 
     // 예약 요청 문자 발송 메서드
     private void sendReservationMessageToPartner(Reservation reservation) {
-        String text = String.format("%s에 예약이 접수(수정)되었습니다.\n" +
+        String text = String.format("%s에 예약이 접수(수정/취소)되었습니다.\n" +
                         "- 예약일자 : %s\n" +
                         "- 예약자명 : %s\n" +
                         "예약 상세내용 바로가기\n" +

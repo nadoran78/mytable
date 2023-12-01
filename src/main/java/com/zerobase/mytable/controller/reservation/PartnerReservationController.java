@@ -1,4 +1,4 @@
-package com.zerobase.mytable.controller;
+package com.zerobase.mytable.controller.reservation;
 
 import com.zerobase.mytable.dto.ReservationDto;
 import com.zerobase.mytable.dto.StoreDto;
@@ -18,10 +18,33 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @RequestMapping("/partner")
 @PreAuthorize("hasRole('PARTNER')")
-public class PartnerController {
+public class PartnerReservationController {
 
     private final ReservationService reservationService;
     private final StoreService storeService;
+
+    // 파트너가 관리하고 있는 점포 목록 조회
+    @GetMapping("/my-stores")
+    public Page<StoreDto> getMyStores(
+            @RequestHeader(name = "X-AUTH-TOKEN") String token,
+            @RequestParam Integer page, @RequestParam Integer size) {
+        return storeService.getMyStores(token, PageRequest.of(page, size));
+    }
+
+    // 파트너가 관리하고 있는 점포의 예약 목록 조회
+    @GetMapping("/store/reservations")
+    public Page<ReservationDto> getReservationsByStore(
+            @RequestHeader(name = "X-AUTH-TOKEN") String token,
+            @RequestParam String storename,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate endDate,
+            @RequestParam Integer page, @RequestParam Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return storeService.getReservationsByStore(token, storename,
+                startDate, endDate, pageRequest);
+    }
 
     // 예약 상세정보 조회
     @GetMapping("/reservation/detail")
@@ -47,33 +70,8 @@ public class PartnerController {
         return reservationService.partnerReservationReject(token, reservationUid);
     }
 
-    // 파트너가 관리하고 있는 점포 목록 조회
-    @GetMapping("/my-stores")
-    public Page<StoreDto> getMyStores(
-            @RequestHeader(name = "X-AUTH-TOKEN") String token,
-            @RequestParam Integer page, @RequestParam Integer size) {
-        return storeService.getMyStores(token, PageRequest.of(page, size));
-    }
-
-    // 파트너가 관리하고 있는 점포의 예약 목록 조회
-    @GetMapping("/store/reservations")
-    @PreAuthorize("hasRole('PARTNER')")
-    public Page<ReservationDto> getReservationsByStore(
-            @RequestHeader(name = "X-AUTH-TOKEN") String token,
-            @RequestParam String storename,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                LocalDate endDate,
-            @RequestParam Integer page, @RequestParam Integer size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return storeService.getReservationsByStore(token, storename,
-                startDate, endDate, pageRequest);
-    }
-
     // 키오스크에서 예약 검색
     @GetMapping("/store/reservation/search")
-    @PreAuthorize("hasRole('PARTNER')")
     public Page<ReservationDto> searchReservation(
             @RequestHeader(name = "X-AUTH-TOKEN") String token,
             @RequestParam String storename, @RequestParam String underName,
@@ -84,8 +82,7 @@ public class PartnerController {
     }
 
     // 키오스크에서 예약 도착 확인
-    @PostMapping("/reservation/arrival-check")
-    @PreAuthorize("hasRole('PARTNER')")
+    @PostMapping("/reservation/detail/arrival-check")
     public CommonResponse arrivalConfirm(
             @RequestHeader(name = "X-AUTH-TOKEN") String token,
             @RequestParam String reservationUid) {

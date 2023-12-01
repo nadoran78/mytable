@@ -53,6 +53,9 @@ public class Customer extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
     private List<Reservation> reservations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
+    private List<Review> reviews = new ArrayList<>();
+
     // 계정이 가지고 있는 권한 목록을 리턴
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

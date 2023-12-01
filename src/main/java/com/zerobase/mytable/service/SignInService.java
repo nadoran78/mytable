@@ -38,7 +38,7 @@ public class SignInService {
         return response;
     }
 
-    // 파트너 로그인(이메일 존재 여부 확인, 패스워드 확인, 로그인 결과 확인 및 반환)
+    // 고객 로그인(이메일 존재 여부 확인, 패스워드 확인, 로그인 결과 확인 및 반환)
     public SignInDto.Response customerSignIn(SignInDto.Request request) {
         Customer customer = customerRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));

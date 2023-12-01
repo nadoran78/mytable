@@ -42,6 +42,9 @@ public class Store extends BaseEntity{
     @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
     private List<Reservation> reservations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
+    private List<Review> reviews = new ArrayList<>();
+
     public static Store from(StoreRegisterDto.Request request){
         return Store.builder()
                 .storename(request.getStorename())
