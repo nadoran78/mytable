@@ -1,6 +1,5 @@
 package com.zerobase.mytable.controller;
 
-import com.zerobase.mytable.dto.ReservationDto;
 import com.zerobase.mytable.dto.StoreDto;
 import com.zerobase.mytable.dto.StoreRegisterDto;
 import com.zerobase.mytable.service.StoreService;
@@ -9,10 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,7 +39,7 @@ public class StoreController {
     }
 
     // 점포 정보 수정
-    @PutMapping("/info/update")
+    @PutMapping("/info")
     @PreAuthorize("hasRole('PARTNER')")
     public StoreDto updateStoreInfo(@RequestHeader(name = "X-AUTH-TOKEN") String token,
                                     @RequestParam String existingStorename,
@@ -52,7 +48,7 @@ public class StoreController {
     }
 
     // 점포 삭제
-    @DeleteMapping("/info/delete")
+    @DeleteMapping("/info")
     @PreAuthorize("hasRole('PARTNER')")
     public StoreRegisterDto.Response deleteStore(
             @RequestHeader(name = "X-AUTH-TOKEN") String token,

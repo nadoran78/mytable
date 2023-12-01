@@ -23,8 +23,8 @@ public class SignUpDto {
         private String email;
 
         @NotNull(message = "반드시 값이 있어야 합니다.")
-        @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$",
-                message = "이름은 특수문자를 제외한 2~10자리여야 합니다.")
+        @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z-_]{2,10}$",
+                message = "이름은 숫자, 특수문자를 제외한 2~10자리여야 합니다.")
         private String name;
 
         @NotNull(message = "반드시 값이 있어야 합니다.")

@@ -153,21 +153,8 @@ public class StoreService {
         List<ReservationDto> reservationDtos = store.getReservations().stream()
                 .filter(x -> x.getDateTime().isAfter(startDate.atStartOfDay())
                         && x.getDateTime().isBefore(endDate.atTime(LocalTime.MAX)))
-                .sorted((x, y) -> {
-                    if (x.getDateTime().isBefore(y.getDateTime())) {
-                        return -1;
-                    } else if (x.getDateTime().isEqual(y.getDateTime())) {
-                        if (x.getCreatedAt().isBefore(y.getCreatedAt())) {
-                            return -1;
-                        } else if (x.getCreatedAt().isEqual(y.getCreatedAt())) {
-                            return 0;
-                        } else {
-                            return 1;
-                        }
-                    } else {
-                        return 1;
-                    }
-                })
+                .sorted(Comparator.comparing(Reservation::getDateTime)
+                        .thenComparing(BaseEntity::getCreatedAt))
                 .map(ReservationDto::from)
                 .collect(Collectors.toList());
 

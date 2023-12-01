@@ -6,6 +6,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+    // 공통
+    INVALID_REQUEST("잘못된 요청입니다."),
+    INTERNAL_SERVER_ERROR("내부 서버 오류가 발생했습니다."),
+
     // 토큰 관련
     INVALID_TOKEN("유효하지 않은 토큰입니다."),
     ACCESS_DENIED("접근 권한이 없습니다."),
@@ -29,7 +33,13 @@ public enum ErrorCode {
     NOT_FOUND_RESERVATION("예약 정보가 없습니다. 예약자명과 전화번호를 확인해주세요."),
     NOT_RESERVATION_STORE("예약한 매장이 아닙니다."),
     ENTRANCE_NOT_ON_TIME("도착 확인은 예약 시간 10분 전부터 가능합니다."),
-    TIME_OVER("입장 가능 시간이 지났습니다.");
+    TIME_OVER("입장 가능 시간이 지났습니다."),
+
+    // 리뷰 관련
+    DID_NOT_USE_THIS_STORE("리뷰는 해당 점포를 사용한 후에 작성하여 주세요."),
+    NOT_FOUND_REVIEW("존재하지 않는 리뷰입니다."),
+    ONLY_WORKS_WITH_WRITER("리뷰 작성자만 수정, 삭제 가능합니다."),
+    CANNOT_UPDATE_STORENAME("점포를 수정할 수는 없습니다.");
 
 
     private final String description;

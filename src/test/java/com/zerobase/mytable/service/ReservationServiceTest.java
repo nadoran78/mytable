@@ -404,7 +404,8 @@ class ReservationServiceTest {
         //given
         LocalDateTime now = LocalDateTime.now();
         Customer customer = Customer.builder().uid("abc").build();
-        Store store = Store.builder().storename("포장마차").build();
+        Partner partner = Partner.builder().phone("123").build();
+        Store store = Store.builder().storename("포장마차").partner(partner).build();
         Reservation reservation = Reservation.builder()
                 .customer(customer)
                 .uid("1")
@@ -414,12 +415,19 @@ class ReservationServiceTest {
                 .store(store)
                 .build();
 
+        SingleMessageSentResponse singleMessageSentResponse =
+                new SingleMessageSentResponse("a", "b", "c",
+                        MessageType.MMS, "1", "2", "3",
+                        "4", "5");
+
         Mockito.when(reservationRepository.findByUid(anyString()))
                 .thenReturn(Optional.of(reservation));
         Mockito.when(tokenProvider.getUid(anyString()))
                 .thenReturn("abc");
         Mockito.when(reservationRepository.save(any(Reservation.class)))
                 .then(returnsFirstArg());
+        Mockito.when(sendMessageService.sendOneMessage(anyString(), anyString()))
+                .thenReturn(singleMessageSentResponse);
         //when
         String token = "1111";
         String reservationUid = "1";
